@@ -11,6 +11,10 @@ import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
+  const pathname = usePathname()
+
+  if(pathname.startsWith('/studio')) return null
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between space-x-4 px-6 sm:space-x-0">
@@ -34,6 +38,13 @@ export function SiteHeader() {
             </Button>
           </Link>
           <ThemeToggle />
+          {process.env.NODE_ENV === "development" && (
+            <Link href='/studio'>
+              <Button size="sm" variant="ghost">
+                <Edit className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
