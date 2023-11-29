@@ -11,15 +11,27 @@ import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
+  const router = useRouter()
   const pathname = usePathname()
 
+  const searchParams = useSearchParams()
+  const defaultSearchQuery = searchParams.get('search') ?? ""
+
   if(pathname.startsWith('/studio')) return null
+
+  // search
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const searchQuery = formData.get('search')
+    router.replace(`/?search=${searchQuery}`)
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between space-x-4 px-6 sm:space-x-0">
         <MainNav />
-        <form className="hidden items-center lg:inline-flex">
+        <form onSubmit={handleSubmit} className="hidden items-center lg:inline-flex">
           <Input
             id="search"
             name="search"
@@ -27,6 +39,7 @@ export function SiteHeader() {
             autoComplete="off"
             placeholder="Search products..."
             className="h-9 lg:w-[300px]"
+            defaultValue={defaultSearchQuery}
           />
         </form>
         <div className="flex items-center space-x-1">
